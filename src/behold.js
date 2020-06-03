@@ -66,7 +66,9 @@ class Behold {
 
     applyParams(params){
         Object.keys(params).forEach(param => {
-            this.component.bindings[param].value = params[param];
+            if(this.component.bindings[param]){
+                this.component.bindings[param].value = params[param];
+            }
         });
 
         this.component = this.componentFrom(this.component);
