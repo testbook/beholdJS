@@ -3,15 +3,14 @@ const { holdableSampleDirective } = require("../index");
 
 const TTL = 60*60*1000; // 1Hour
 
-
 class beholdServer{
     start(){
-        if(!this.preRender){
+        if(!this.preRenderComponentLeft){
             this.server.listen(this.port, () => console.log(`Behold server listening on port:${this.port}`))
         } else {
             this.startWaiting = true;
             console.clear();
-            console.log(`waiting for ${this.preRender} components to preRender`)
+            console.log(`waiting for ${this.preRenderComponentLeft} components to render initial state`)
         }
     }
 
@@ -36,13 +35,13 @@ class beholdServer{
     }
 
     addComponent(componentPath,behold){
-        this.preRender+=1;
+        this.preRenderComponentLeft+=1;
         this.components[componentPath] = behold;
         //render initial state of component
         // todo perhaps using a queue here makes sense
         behold.render().then(heldComponent => {
             this.addToCache(componentPath,heldComponent);
-            this.preRender-=1;
+            this.preRenderComponentLeft-=1;
             if(this.startWaiting){
                 this.start()
             }
@@ -59,7 +58,7 @@ class beholdServer{
 
         if(this.isRenderRequired(key)){
             let bind = JSON.parse(bindStr);
-            console.log('render');
+            //console.log('render');
             this.setComponentProcessing(key);
             this.components[component].render(bind).then(heldComponent => this.addToCache(key,heldComponent))
         }
@@ -72,20 +71,13 @@ class beholdServer{
         this.port = port;
         this.map = {};
         this.components = {};
-        this.preRender = 0;
-        this.server.get('/favicon.ico',(req,res) => {
-            res.status(404).send();
-        });
+        this.preRenderComponentLeft = 0;
         this.server.get('/*',(req,res) => {
             this.getHeldComponent(req,res)
         });
     }
 }
 
-let bh = new beholdServer(3000);
-bh.addComponent('sample-directive',holdableSampleDirective);
-
-bh.start();
 module.exports = {
     beholdServer
 };
