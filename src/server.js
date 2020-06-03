@@ -1,40 +1,7 @@
 const express = require('express')
 const { holdableSampleDirective } = require("../index");
-const { holdable } = require("../old/index");
-
-//const app = express()
-//const port = 3000
 
 const TTL = 60*60*1000; // 1Hour
-
-//var map = {};
-//app.get('/favicon.ico',(req,res) => {
-//    res.status(404).send();
-//})
-/*
-app.get('/*', (req, res) => {
-    let component = req.params[0];
-    let bindStr = req.query.bind;
-    let key = component+bindStr;
-    let out = '';
-
-    if(map[key]){
-        out = map[key].value || (map[component] && map[component].value);
-    }
-    if(!map[key] || !map[key]._processing && TTL < new Date().getTime() - map[key].lastUpdated ){
-        let bind = JSON.parse(bindStr);
-        console.log('render');
-        map[key] = map[key] || {};
-        map[key]._processing = true;
-        heldSampleDirective.render(bind).then(i=> { map[key] = {value:i,lastUpdated:new Date().getTime()} })
-    }
-    res.send(out || `<!-- Rendering ${component}${bindStr} -->`)
-});
-*/
-//heldSampleDirective.render().then(i=> { map['sample-directive'] = {value:i,lastUpdated:new Date().getTime()}; console.log('initial render done')})
-
-//app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
-
 
 
 class beholdServer{
