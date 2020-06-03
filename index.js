@@ -20,7 +20,7 @@ let sampleDirectiveScript = `
                     e.variable2++
                 }
                 ,
-                e.variable = "click button toggle class",
+                e.variable = "click button toggle class"+Math.random(),
                 e.variable2 = 0
         }
         angular.module("sample", []).directive("sampleDirective", e)
@@ -34,7 +34,11 @@ let sampleDirective = {
     scripts   : [  {src:angularRuntime}, {content:sampleDirectiveScript} ],
 };
 
-let heldSampleDirective = new Behold(sampleDirective,{runScripts: "dangerously" , resources: "usable"},30000);
+let holdableSampleDirective = new Behold(sampleDirective,{runScripts: "dangerously" , resources: "usable"},30000);
 
-heldSampleDirective.render({ isMobile : true , val : 'number 1'}).then(console.log);
-heldSampleDirective.render({ isMobile : false , val : 'number 2' }).then(console.log);
+//heldSampleDirective.render({ isMobile : true , val : 'number 1'}).then(console.log);
+//heldSampleDirective.render({ isMobile : false , val : 'number 2' }).then(console.log);
+
+module.exports = {
+    holdableSampleDirective
+}
