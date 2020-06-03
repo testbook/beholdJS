@@ -43,8 +43,8 @@ class Behold {
         }
     };
 
-    freeze (name) {
-        this._markup = this._markup.replace(new RegExp(name, "g"),`behold-${name}`);
+    freeze (markup, name) {
+        return markup.replace(new RegExp(name, "g"),`behold-${name}`);
     };
 
     generateStatic(dom,resolve,reject){
@@ -52,8 +52,8 @@ class Behold {
         try{
             markup = this.getMarkup(dom);
             if(this.component.freezeChildren){
-                this.freeze(this.component.directive.name);
-                this.component.freezeChildren.forEach(child => {this.freeze(child);})
+                markup = this.freeze(markup, this.component.directive.name);
+                this.component.freezeChildren.forEach(child => {markup = this.freeze(markup,child);})
             }
             dom.window.close();
             resolve(markup);
@@ -76,6 +76,8 @@ class Behold {
         let dom,timeout;
         if(params){
             this.applyParams(params);
+        } else {
+            this.component = this.componentFrom(this.component);
         }
         return new Promise((resolve,reject)=>{
             try{
@@ -133,7 +135,7 @@ class Behold {
         this.bannedAttrs = bannedAttrs;
         this.bannedClasses = bannedClasses;
 
-        this.component = this.componentFrom(componentConfig);
+        this.component = {...componentConfig};
         this.options = options;
         this.timeout = timeout;
     }
