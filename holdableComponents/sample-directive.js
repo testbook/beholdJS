@@ -1,4 +1,4 @@
-const { Behold } = require("../src/behold");
+const { Holdable,Beholder } = require("../src/behold");
 
 let sampleDirectiveScript = `
     (function() {
@@ -27,6 +27,8 @@ let sampleDirectiveScript = `
     })();
     `;
 let angularRuntime = "https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.min.js";
+
+//component config object
 let sampleDirective = {
     ngApp     : "sample",
     directive : { name: "sample-directive" , type : "E"},
@@ -34,8 +36,11 @@ let sampleDirective = {
     scripts   : [  {src:angularRuntime}, {content:sampleDirectiveScript} ],
 };
 
-let holdableSampleDirective = new Behold(sampleDirective,{runScripts: "dangerously" , resources: "usable"},30000);
+//return instance of holdable object with (optional) custom renderer & JSDOMOptions & timeout
+function holdableSampleDirective(){
+ return new Holdable(sampleDirective,{runScripts: "dangerously" , resources: "usable"},30000,Beholder);
+}
 
 module.exports = {
-    holdableSampleDirective
+    holdableSampleDirective , sampleDirectiveConf:sampleDirective
 };

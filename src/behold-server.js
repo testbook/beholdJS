@@ -1,15 +1,15 @@
-const express = require('express')
-const { holdableSampleDirective } = require("../index");
+const express = require('express');
+const { Beholder } = require('./behold');
 
 const TTL = 60*60*1000; // 1Hour
 
 class beholdServer{
     start(){
+        console.clear();
         if(!this.preRenderComponentLeft){
             this.server.listen(this.port, () => console.log(`Behold server listening on port:${this.port}`))
         } else {
             this.startWaiting = true;
-            console.clear();
             console.log(`waiting for ${this.preRenderComponentLeft} components to render initial state`)
         }
     }
@@ -34,18 +34,31 @@ class beholdServer{
         this.map[key]._processing = true;
     }
 
-    addComponent(componentPath,behold){
-        this.preRenderComponentLeft+=1;
-        this.components[componentPath] = behold;
-        //render initial state of component
-        // todo perhaps using a queue here makes sense
-        behold.render().then(heldComponent => {
-            this.addToCache(componentPath,heldComponent);
-            this.preRenderComponentLeft-=1;
-            if(this.startWaiting){
-                this.start()
+    renderComponent(component,params,cacheKey,firstRender){
+
+        let postRender = (heldComponent) => {
+            this.addToCache(cacheKey,heldComponent);
+            if(firstRender){
+                this.preRenderComponentLeft-=1;
+                if(this.startWaiting){
+                    this.start()
+                }
             }
-        })
+        };
+
+        if(component.isHoldable){
+            component.behold.using(component.behold.beholder || this.renderer).render(params).then(postRender)
+        } else {
+            this.renderer.render(component.behold,params).then(postRender)
+        }
+    }
+
+    addComponent(componentPath,behold,isHoldable){
+        this.preRenderComponentLeft+=1;
+        this.components[componentPath] = {behold,isHoldable};
+        //render initial state of component
+        // todo perhaps using a queue here makes sense to constrain rendering to a Max of N components at a time
+        this.renderComponent(this.components[componentPath],undefined,componentPath,true);
     }
 
     getHeldComponent(req,res){
@@ -60,13 +73,13 @@ class beholdServer{
             let bind = JSON.parse(bindStr);
             //console.log('render');
             this.setComponentProcessing(key);
-            this.components[component].render(bind).then(heldComponent => this.addToCache(key,heldComponent))
+            this.renderComponent(this.components[component],bind,key);
         }
 
         res.send(this.getFromCache(component,bindStr) || `<!-- Rendering ${component}${bindStr} -->`)
     }
 
-    constructor(port){
+    constructor(port,rendererConstructor = Beholder){
         this.server = express();
         this.port = port;
         this.map = {};
@@ -75,6 +88,8 @@ class beholdServer{
         this.server.get('/*',(req,res) => {
             this.getHeldComponent(req,res)
         });
+        this.rendererConstructor = rendererConstructor;
+        this.renderer = new this.rendererConstructor();
     }
 }
 
