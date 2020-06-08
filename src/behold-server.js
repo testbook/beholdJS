@@ -63,7 +63,7 @@ class beholdServer{
 
     getHeldComponent(req,res){
         let component = req.params && req.params[0];
-        let bindStr = req.query && req.query.bind || "";
+        let bindStr = req.query && req.query.bind || "{}";
 
         if(!this.components[component]) return res.status(404).send(`<!-- unable to render ${component}${bindStr}-->`);
 
