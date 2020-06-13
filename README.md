@@ -20,7 +20,7 @@ Once the JS framework has initialised it will replace this with the "active" ver
 
 
 # AngularJS 1.x
-For the included angularJS 1.x renderer we have to supply a config Object that will let us know which directive to use and how to pass params to it using DOM.
+For the included angularJS 1.x renderer we have to supply a config Object that will let the renderer know which directive to use and how to pass parameters to it.
 
 ```
 let sampleDirectiveConf = {
@@ -31,9 +31,8 @@ let sampleDirectiveConf = {
 };
 ```
 * ngApp & directive configuration must match your angular module and directive respectively. 
-* The bindings also need to have a initial value and the type of binding that it is (this is important for params to pass properly).
-* The directive itself & the angular runtime is expected to be loaded in the scripts section of the directive. 
-each script can be defined as a url (using src) or as a string (using content) containing the JS to be inserted in a script tag before rendering. 
+* The bindings also need to have an initial value and the type of binding that it is (this is important for params to pass properly).
+* The directive itself & the angular runtime is expected to be loaded in the scripts section of the directive. Each script can be defined as a url (using src) or as a string (using content) containing the JS to be inserted in a script tag before rendering. 
 * If you are going to generate a lot of requests it might make sense for your project to also include the angular runtime as a string, to avoid resource fetching.
 
 you can use the config object directly if you need to, or you can define optional custom JSDOM options, render timeout & renderer 
@@ -45,7 +44,7 @@ function holdableSampleDirective(){
 }
 ```
 
-If you require to use the holdable object, make an instance of the object and call it's render function. the render function may have an optional parameter that is an object with key-value pairs of some or all of the directive's bindings & returns a Promise object that will resolve to the static markup.
+If you require to use the holdable object, make an instance of the object and call its render function.The render function may have an optional parameter that is an object with key-value pairs of some or all of the directive's bindings & returns a Promise object that will resolve to the static markup.
 
 ``` 
 let sampleDirective = holdableSampleDirective();
@@ -91,7 +90,7 @@ bh.addComponent('sample-directive',holdableSampleDirective(),true);
 bh.start();
 ```
 
-you may also optionally provide the constructor of a global renderer to be used by default by the server for rendering directives using the config object, or supply a holdableObject that includes it's own renderer. 
+you may also optionally provide the constructor of a global renderer to be used by default by the server for rendering directives using the config object, or supply a holdableObject that includes its own renderer. 
 
 once the server starts it will render an initial state of your components which will be generated using the default values you have provided in the configObject , after rendering all the components it will start listening on the provided port number for requests that match the format.
 
@@ -111,7 +110,7 @@ This caching mechanism, will serve the last rendered state of the component agai
 
 # To-do
 
-This project is far from finished, at it's current stage it is merely an exploration in the possibility of SSR rendering JS components without having to re-write it's logic in ,for example, PHP.
+This project is far from finished, at its current stage it is merely an exploration in the possibility of SSR rendering JS components without having to re-write its logic in ,for example, PHP.
 
 * expose caching ttl
 * support innerText 
