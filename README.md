@@ -1,10 +1,15 @@
-# beholdJS
+# beholdJS 
+ 
+![npm](https://img.shields.io/npm/v/beholdjs?style=flat-square) 
+
 A Server Side Rendering approach for JS components using JSDOM , primarily focussing on Angular 1.x but can be extended by supplying a custom renderer
+
+To install simply run `npm install beholdjs` 
 
 # Target Use Case
 
 Insert the server side rendered component in the un-initialised state of the existing component using server side includes.
-Once the framework has initialised it will replace this with the "active" version of this component.
+Once the JS framework has initialised it will replace this with the "active" version of this component.
 
 ```
   <sample-directive val="text" isMobile="isMobile">
@@ -12,6 +17,7 @@ Once the framework has initialised it will replace this with the "active" versio
   </sample-directive>
 
 ```
+
 
 # AngularJS 1.x
 For the included angularJS 1.x renderer we have to supply a config Object that will let us know which directive to use and how to pass params to it using DOM.
@@ -27,7 +33,7 @@ let sampleDirectiveConf = {
 * ngApp & directive configuration must match your angular module and directive respectively. 
 * The bindings also need to have a initial value and the type of binding that it is (this is important for params to pass properly).
 * The directive itself & the angular runtime is expected to be loaded in the scripts section of the directive. 
-each script can be defined as a url (using src) or as a string containing the JS to be inserted in a script tag before rendering. 
+each script can be defined as a url (using src) or as a string (using content) containing the JS to be inserted in a script tag before rendering. 
 * If you are going to generate a lot of requests it might make sense for your project to also include the angular runtime as a string, to avoid resource fetching.
 
 you can use the config object directly if you need to, or you can define optional custom JSDOM options, render timeout & renderer 
@@ -87,7 +93,7 @@ bh.start();
 
 you may also optionally provide the constructor of a global renderer to be used by default by the server for rendering directives using the config object, or supply a holdableObject that includes it's own renderer. 
 
-once the server starts it will render an initial state of your components which will be generated using the default values u have provided in the configObject , after rendering all the components it will start listening on the provide port number for requests that match the format.
+once the server starts it will render an initial state of your components which will be generated using the default values you have provided in the configObject , after rendering all the components it will start listening on the provided port number for requests that match the format.
 
 ```<Domain>:<port>/<endpoint>?bind=<object to bind>```
 
@@ -97,9 +103,11 @@ where the `<endpoint>` will be determined by the first parameter of `bh.addCompo
 
 This will render the component defined with the endpoint `sample-directive-conf` & pass the value of the parameters to the directive.
 
-# Caching 
+# Caching of rendered components 
 
-The inBuilt caching mechanism in the server, will first serve the last rendered state of the component, or initial state & then render the current state (against the current params), which will start serving after it has rendered for a TTL of 1 Hour. After which a new render will be triggered and stale state will be rendered untill this render is completed. we can consider it to be 'stale while rendering'.
+The current implementation caches the rendered components in-memory by following a "stale while rendering" strategy.
+This caching mechanism, will serve the last rendered state of the component against the current params. In the case there isn't a last rendered state against the current params, the initial state will be served and a new render will be triggered against these params. Each render will be cached upon for a TTL of 1 Hour, after this time, if it is requested again a new render will be triggered.The stale state will continue to be served untill render completion.
+
 
 # To-do
 
@@ -108,6 +116,7 @@ This project is far from finished, at it's current stage it is merely an explora
 * expose caching ttl
 * support innerText 
 * implement a render queue with max 'concurrent' renders
+* allow the rendered component to signal rendering completion
 * supply a small script with the SSRed component to allow for some interactivity
 * allow components to expose the data from api calls when SSRed and to reuse them once the framework is loaded too.
 * Improve compatibility by expanding the list of banned attributes & classes in the output markup
@@ -117,4 +126,5 @@ This project is far from finished, at it's current stage it is merely an explora
 * allow passing authentication cookies to allow for personalized / restricted content to be fetched by JS
   * caching mechanism in such a scenario
 * explore if cache needs to be in memory or can be moved to disk
+
 
