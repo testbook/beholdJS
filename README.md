@@ -101,11 +101,10 @@ This will render the component defined with the endpoint `sample-directive-conf`
 
 The inBuilt caching mechanism in the server, will first serve the last rendered state of the component, or initial state & then render the current state (against the current params), which will start serving after it has rendered for a TTL of 1 Hour. After which a new render will be triggered and stale state will be rendered untill this render is completed. we can consider it to be 'stale while rendering'.
 
-# Todo
+# To-do
 
 This project is far from finished, at it's current stage it is merely an exploration in the possibility of SSR rendering JS components without having to re-write it's logic in ,for example, PHP.
 
-* create a node_module
 * expose caching ttl
 * support innerText 
 * implement a render queue with max 'concurrent' renders
