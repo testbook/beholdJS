@@ -16,9 +16,14 @@
     "type": "git",
     "url": "git+https://github.com/PrashantMohta/beholdJS.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "angularJs",
+    "SSR",
+    "JSDOM",
+    "behold"
+  ],
+  "author": "Prashant Mohta",
+  "license": "Unlicense",
   "bugs": {
     "url": "https://github.com/PrashantMohta/beholdJS/issues"
   },

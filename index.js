@@ -1,16 +1,9 @@
 const { beholdServer } = require("./src/behold-server");
-const { Beholder } = require('./src/behold');
+const { defaultOptions, debugOptions , Beholder , Holdable }  = require('./src/behold');
 
-const { holdableSampleDirective,sampleDirectiveConf } = require("./holdableComponents/sample-directive");
+exports.defaultOptions = defaultOptions;
+exports.debugOptions = debugOptions;
 
-// server port & (optional) renderer to use globally
-let bh = new beholdServer(3000,Beholder);
-
-// use any component config obj directly
-bh.addComponent('sample-directive-conf',sampleDirectiveConf);
-
-// use specific renderer, JSDOMoptions and timeout defined in holdable object
-bh.addComponent('sample-directive',holdableSampleDirective(),true);
-
-
-bh.start();
+exports.Holdable = Holdable;
+exports.Beholder = Beholder;
+exports.beholdServer = beholdServer;

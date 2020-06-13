@@ -1,4 +1,4 @@
-const { Holdable,Beholder } = require("../src/behold");
+const { Holdable,Beholder } = require('beholdjs');
 
 let sampleDirectiveScript = `
     (function() {
