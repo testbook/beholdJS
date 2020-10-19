@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PrashantMohta/beholdJS.git"
+    "url": "git+https://github.com/testbook/beholdJS.git"
   },
   "keywords": [
     "angularJs",
@@ -25,7 +25,7 @@
   "author": "Prashant Mohta",
   "license": "Unlicense",
   "bugs": {
-    "url": "https://github.com/PrashantMohta/beholdJS/issues"
+    "url": "https://github.com/testbook/beholdJS/issues"
   },
-  "homepage": "https://github.com/PrashantMohta/beholdJS#readme"
+  "homepage": "https://github.com/testbook/beholdJS#readme"
 }
